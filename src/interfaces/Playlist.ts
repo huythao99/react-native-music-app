@@ -3,3 +3,8 @@ export interface IPlaylist {
   title: string;
   items: string[];
 }
+
+export interface ItemType {
+  id: number | string;
+  title: string;
+}

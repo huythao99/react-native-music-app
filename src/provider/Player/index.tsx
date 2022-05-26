@@ -22,9 +22,9 @@ interface Props {
 }
 
 export const PlayerProvider: React.FC<Props> = ({ children }: Props) => {
-  const [isReady, setReady] = useState<boolean>(false);
   const [isPlaying, setPlaying] = useState<boolean>(false);
   const [track, setTrack] = useState<ITrack>(defaultTrack);
+  const [displayPlayer, setDisplayPlayer] = useState(false);
 
   useTrackPlayerEvents([PLAYBACK_STATE], (event: any) => {
     if (event.type === PLAYBACK_STATE) {
@@ -63,7 +63,7 @@ export const PlayerProvider: React.FC<Props> = ({ children }: Props) => {
           TrackPlayer.CAPABILITY_SKIP_TO_PREVIOUS,
         ],
       }).then(() => {
-        setReady(true);
+        // setReady(true);
       });
     });
   }, []);
@@ -74,6 +74,9 @@ export const PlayerProvider: React.FC<Props> = ({ children }: Props) => {
       let trackObject = await getTrack(trackId);
 
       if (trackObject) {
+        if (!displayPlayer) {
+          setDisplayPlayer(true);
+        }
         setTrack({ ...trackObject, duration: '' });
       }
     });
@@ -91,9 +94,9 @@ export const PlayerProvider: React.FC<Props> = ({ children }: Props) => {
     <Context.Provider
       value={{
         track,
-        isReady,
         isPlaying,
         setPlaying,
+        displayPlayer,
       }}>
       {children}
     </Context.Provider>

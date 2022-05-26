@@ -5,6 +5,7 @@ import { RootStackParamList } from 'src/interfaces/RootStackParamList';
 import TopTabs from './TopTabs';
 import ShowListScreen from '../ShowListScreen';
 import ListByFilterScreen from '../ListByFilterScreen';
+import CreateNewPlayList from '../CreateNewPlayList';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -31,6 +32,14 @@ export default function AppNavigator() {
         <Stack.Screen
           name={'ListByFilterScreen'}
           component={ListByFilterScreen}
+          options={{
+            headerShown: false,
+            presentation: 'modal',
+          }}
+        />
+        <Stack.Screen
+          name={'CreateNewPlayList'}
+          component={CreateNewPlayList}
           options={{
             headerShown: false,
             presentation: 'modal',

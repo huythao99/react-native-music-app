@@ -8,4 +8,7 @@ export interface ITrack {
   duration: string;
   artwork?: ImageRequireSource;
   last?: boolean;
+  albumId: string;
+  singerId: string;
+  typeTracksId: string;
 }

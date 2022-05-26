@@ -5,12 +5,14 @@ import { Colors } from 'src/constants';
 import { Player } from './Player';
 import AppNavigator from './AppNavigator';
 import { initialWindowMetrics } from 'react-native-safe-area-context';
+import { usePlayer } from 'src/provider';
 
 export const Screens = () => {
+  const { displayPlayer } = usePlayer();
   return (
     <View style={styles.container}>
       <AppNavigator />
-      <Player />
+      {displayPlayer && <Player />}
     </View>
   );
 };

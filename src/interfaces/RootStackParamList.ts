@@ -1,3 +1,5 @@
+import { ItemType } from './Playlist';
+
 export type RootStackParamList = {
   TopTabs: undefined;
   ShowListScreen: {
@@ -5,9 +7,9 @@ export type RootStackParamList = {
     title: string;
   };
   ListByFilterScreen: {
-    title: string;
-    items: Array<string>;
+    item: ItemType;
     index: number;
-    indexList: number;
   };
+  Personal: undefined;
+  CreateNewPlayList: undefined;
 };

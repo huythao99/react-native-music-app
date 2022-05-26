@@ -1,63 +1,22 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, View } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {
-  skip,
-  play,
-  addEventListener,
-  getState,
-  STATE_READY,
-  STATE_PLAYING,
-} from 'react-native-track-player';
-
-import { ITrack } from 'src/interfaces';
-import { Colors } from 'src/constants';
-import { usePlaylist } from 'src/provider';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Text } from 'src/components';
-import { Options } from 'src/icons';
+import { Colors } from 'src/constants';
+import { ITrack } from 'src/interfaces';
 
 interface Props {
-  item?: ITrack;
+  item: ITrack;
   last: boolean;
-  playlistIndex: number;
-  indexOfList: number;
+  onPressItem: (id: string) => void;
 }
 
-export const Item: React.FC<Props> = ({
-  item,
-  last,
-  playlistIndex,
-  indexOfList,
-}: Props) => {
-  if (!item) return null;
-
+export const Item: React.FC<Props> = ({ item, last, onPressItem }: Props) => {
   const { id, title, artwork, artist, duration } = item;
-  const { active, updateTrackPlayer, setIndexOfList } = usePlaylist();
 
   const onPress = async () => {
-    try {
-      setIndexOfList(indexOfList);
-      if (active !== playlistIndex) {
-        await updateTrackPlayer(playlistIndex, indexOfList);
-      }
-      // get state before skip
-      const state = await getState();
-      await skip(id);
-      // If it can't be played, wait until it's ready and then play
-      if (state !== STATE_PLAYING) {
-        play();
-        // let subscription = addEventListener('playback-state', (data) => {
-        //   if (data.state === STATE_READY) {
-        //     play();
-
-        //     subscription.remove();
-        //   }
-        // });
-      }
-    } catch (error) {
-      console.log(error.message);
-    }
+    onPressItem(id);
   };
 
   return (
@@ -85,9 +44,6 @@ export const Item: React.FC<Props> = ({
           <Text color={Colors.mute} size={16}>
             {duration}
           </Text>
-        </View>
-        <View style={styles.options}>
-          <Options size={22} />
         </View>
       </View>
     </TouchableOpacity>
@@ -159,11 +115,6 @@ const styles = StyleSheet.create({
   },
 
   time: {
-    minWidth: 50,
-    alignItems: 'flex-end',
-  },
-
-  options: {
     minWidth: 50,
     alignItems: 'flex-end',
   },

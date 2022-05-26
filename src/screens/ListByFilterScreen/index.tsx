@@ -2,57 +2,58 @@ import * as React from 'react';
 import { View, Text, StyleSheet, Dimensions, FlatList } from 'react-native';
 import { Colors } from 'src/constants';
 import { usePlaylist } from 'src/provider';
-import { IPlaylist, ITrack } from 'src/interfaces';
+import { ITrack } from 'src/interfaces';
 import { Item } from '../Playlist/Lists/Item';
+import { ItemType } from 'src/interfaces/Playlist';
+import { getState, play, skip, STATE_PLAYING } from 'react-native-track-player';
+import { tracks } from '../../../data';
+import ListItem from '../Playlist/Lists/ListItem';
 
 const { width } = Dimensions.get('window');
 
 interface ShowListProps {
   route: {
     params: {
-      items: Array<string>;
-      title: string;
+      item: ItemType;
       index: number;
-      indexList: number;
     };
   };
 }
 
 export default function ListByFilterScreen(props: ShowListProps) {
-  const { tracks } = usePlaylist();
-  const [listData, setListData] = React.useState<Array<ITrack>>([]);
+  const { playTrack } = usePlaylist();
+  const [listData, setListData] = React.useState<Array<any>>([]);
 
   React.useEffect(() => {
-    const newData = props.route.params.items.map((value: string | number) => {
-      const indexOfItem = tracks.findIndex(
-        (item: ITrack) => item.id === value.toString(),
-      );
-      return {
-        ...tracks[indexOfItem],
-      };
-    });
+    let newData: ITrack[] = [];
+    switch (props.route.params.index) {
+      case 0:
+        newData = tracks.filter(
+          (itemChild) => itemChild.singerId === props.route.params.item.id,
+        );
+        break;
+      case 1:
+        newData = tracks.filter(
+          (itemChild) => itemChild.albumId === props.route.params.item.id,
+        );
+        break;
+      case 2:
+        newData = tracks.filter(
+          (itemChild) => itemChild.typeTracksId === props.route.params.item.id,
+        );
+        break;
+      default:
+        break;
+    }
     setListData(newData);
   }, []);
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.textHeader}>{props.route.params.title}</Text>
+        <Text style={styles.textHeader}>{props.route.params.item.title}</Text>
       </View>
-      <FlatList
-        data={listData}
-        renderItem={({ item, index }: { item: ITrack; index: number }) => {
-          return (
-            <Item
-              item={item}
-              last={index === listData.length - 1}
-              playlistIndex={props.route.params.index}
-              indexOfList={props.route.params.indexList + 1}
-            />
-          );
-        }}
-        keyExtractor={(_, index) => index.toString()}
-      />
+      <ListItem data={listData} />
     </View>
   );
 }

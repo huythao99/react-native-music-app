@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 
-import {
-  tracks,
-  playlists,
-  listSinger,
-  listAlbum,
-  listAllTrack,
-} from '../../../data';
+import { tracks } from '../../../data';
 
 import { Colors } from 'src/constants';
 import { usePlayer, usePlaylist } from 'src/provider';
@@ -18,38 +12,20 @@ import { Header } from './Header';
 import { Lists } from './Lists';
 import { pause } from 'react-native-track-player';
 import BackgroundTimer from 'react-native-background-timer';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const Playlist = () => {
-  const {
-    setLists,
-    setTracks,
-    setListAlbum,
-    setListSinger,
-    setListAllTrack,
-    timeToStop,
-    setTimeToStop,
-  } = usePlaylist();
+  const { timeToStop, setTimeToStop, setMyPlayLists } = usePlaylist();
 
-  const { setPlaying } = usePlayer();
+  const { setPlaying, displayPlayer } = usePlayer();
   const [timer, setTimer] = useState(null);
 
-  useEffect(() => {
-    setLists(playlists);
-    setTracks(
-      tracks
-        .map((item) => ({
-          ...item,
-          id: String(item.id),
-          url: item.source,
-        }))
-        .sort((a, b) =>
-          a.title.toLowerCase().localeCompare(b.title.toLocaleLowerCase()),
-        ),
-    );
-    setListSinger(listSinger);
-    setListAlbum(listAlbum);
-    setListAllTrack(listAllTrack);
-  }, []);
+  const getData = async () => {
+    const value = await AsyncStorage.getItem('MY_PLAY_LISTS');
+    if (value !== null) {
+      setMyPlayLists(JSON.parse(value));
+    }
+  };
 
   useEffect(() => {
     if (timeToStop !== 0) {
@@ -77,8 +53,16 @@ export const Playlist = () => {
     }
   }, [timeToStop]);
 
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { paddingBottom: displayPlayer ? MINI_AREA_HEIGHT : 0 },
+      ]}>
       <Header />
       <Lists />
     </View>
@@ -90,7 +74,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
     paddingTop: 0,
-    paddingBottom: MINI_AREA_HEIGHT,
   },
   text: {
     fontSize: 40,

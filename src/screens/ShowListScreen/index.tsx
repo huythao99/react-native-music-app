@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { listSinger, listAlbum, listTypeTracks } from '../../../data';
 import * as React from 'react';
 import {
   View,
@@ -10,7 +11,7 @@ import {
 } from 'react-native';
 import { Colors } from 'src/constants';
 import { RootStackParamList } from 'src/interfaces/RootStackParamList';
-import { usePlaylist } from 'src/provider';
+import { ItemType } from 'src/interfaces/Playlist';
 
 interface ShowListProps {
   route: {
@@ -24,7 +25,6 @@ interface ShowListProps {
 type ItemData = {
   id: string | number;
   title: string;
-  items: Array<string>;
 };
 
 type ShowListScreenProps = NativeStackNavigationProp<
@@ -33,16 +33,13 @@ type ShowListScreenProps = NativeStackNavigationProp<
 >;
 
 export default function ShowListScreen(props: ShowListProps) {
-  const { listAlbum, listSinger, lists } = usePlaylist();
   const [listData, setListData] = React.useState<Array<ItemData>>([]);
   const navigation = useNavigation<ShowListScreenProps>();
 
-  const onPress = (item: ItemData, index: number) => {
+  const onPress = (item: ItemType) => {
     navigation.navigate('ListByFilterScreen', {
-      title: item.title,
-      items: item.items,
-      indexList: props.route.params.index,
-      index: index,
+      item: item,
+      index: props.route.params.index,
     });
   };
 
@@ -55,7 +52,7 @@ export default function ShowListScreen(props: ShowListProps) {
         setListData(listAlbum);
         break;
       case 2:
-        setListData(lists);
+        setListData(listTypeTracks);
         break;
       default:
         break;
@@ -70,11 +67,9 @@ export default function ShowListScreen(props: ShowListProps) {
       <FlatList
         data={listData}
         keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item, index }: { item: ItemData; index: number }) => {
+        renderItem={({ item }: { item: ItemData; index: number }) => {
           return (
-            <TouchableOpacity
-              style={styles.btn}
-              onPress={() => onPress(item, index)}>
+            <TouchableOpacity style={styles.btn} onPress={() => onPress(item)}>
               <Text style={styles.textBtn}>{item.title}</Text>
             </TouchableOpacity>
           );
