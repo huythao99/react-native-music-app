@@ -1,4 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
+import { tracks } from '../../../data';
 import * as React from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { Colors } from 'src/constants';
@@ -8,17 +9,26 @@ import ListItem from '../Playlist/Lists/ListItem';
 
 const { width } = Dimensions.get('window');
 
-interface ListByFilterProps {
+interface MyPlayListProps {
   route: {
     params: {
-      data: Array<any>;
+      data: Array<string>;
       title: string;
     };
   };
 }
 
-export default function ListByFilterScreen(props: ListByFilterProps) {
+export default function MyPlayListScreen(props: MyPlayListProps) {
   const { displayPlayer } = usePlayer();
+  const [listData, setListData] = React.useState<Array<any>>([]);
+
+  React.useEffect(() => {
+    const newData = tracks.filter((item) =>
+      props.route.params.data.includes(item.id),
+    );
+    setListData(newData);
+  }, []);
+
   return (
     <View
       style={[
@@ -28,7 +38,7 @@ export default function ListByFilterScreen(props: ListByFilterProps) {
       <View style={styles.header}>
         <Text style={styles.textHeader}>{props.route.params.title}</Text>
       </View>
-      <ListItem data={props.route.params.data} />
+      <ListItem data={listData} />
     </View>
   );
 }

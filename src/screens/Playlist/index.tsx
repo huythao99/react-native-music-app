@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 
 import { tracks } from '../../../data';
 
-import { Colors } from 'src/constants';
+import { Colors, Keys } from 'src/constants';
 import { usePlayer, usePlaylist } from 'src/provider';
 
 import { MINI_AREA_HEIGHT } from '../Player/Dimensions';
@@ -21,7 +21,7 @@ export const Playlist = () => {
   const [timer, setTimer] = useState(null);
 
   const getData = async () => {
-    const value = await AsyncStorage.getItem('MY_PLAY_LISTS');
+    const value = await AsyncStorage.getItem(Keys.MY_PLAY_LISTS);
     if (value !== null) {
       setMyPlayLists(JSON.parse(value));
     }

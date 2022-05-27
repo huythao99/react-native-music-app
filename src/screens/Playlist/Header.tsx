@@ -16,29 +16,28 @@ type HeaderProps = NativeStackNavigationProp<RootStackParamList, 'TopTabs'>;
 export const Header = () => {
   const navigation = useNavigation<HeaderProps>();
 
-  const onPress = (index: number, title: string) => {
-    navigation.navigate('ShowListScreen', {
-      index,
-      title,
-    });
-  };
-
   return (
     <View style={styles.container}>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         <TouchableOpacity
           style={styles.btn}
-          onPress={() => onPress(0, 'Ca sĩ')}>
+          onPress={() => {
+            navigation.navigate('MenuBySingerScreen');
+          }}>
           <Text style={styles.textBtn}>Ca sĩ</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btn}
-          onPress={() => onPress(1, 'Album')}>
+          onPress={() => {
+            navigation.navigate('MenuByAlbumScreen');
+          }}>
           <Text style={styles.textBtn}>Album</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.btn}
-          onPress={() => onPress(2, 'Thể loại')}>
+          onPress={() => {
+            navigation.navigate('MenuByTypeScreen');
+          }}>
           <Text style={styles.textBtn}>Thể loại</Text>
         </TouchableOpacity>
       </ScrollView>

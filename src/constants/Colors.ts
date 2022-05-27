@@ -7,4 +7,5 @@ export const Colors = {
   black: 'rgb(0,0,0)',
   primary: 'rgb(227, 42, 118)',
   blue: 'rgb(103, 213, 254)',
+  confirm: '#43A047',
 };

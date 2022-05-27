@@ -1,14 +1,15 @@
-import { ItemType } from './Playlist';
-
 export type RootStackParamList = {
   TopTabs: undefined;
-  ShowListScreen: {
-    index: number;
+  MenuBySingerScreen: undefined;
+  MenuByAlbumScreen: undefined;
+  MenuByTypeScreen: undefined;
+  ListByFilterScreen: {
+    data: Array<any>;
     title: string;
   };
-  ListByFilterScreen: {
-    item: ItemType;
-    index: number;
+  MyPlayListScreen: {
+    data: Array<string>;
+    title: string;
   };
   Personal: undefined;
   CreateNewPlayList: undefined;

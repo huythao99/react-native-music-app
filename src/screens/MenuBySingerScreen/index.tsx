@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { listSinger, listAlbum, listTypeTracks } from '../../../data';
+import { listSinger, listAlbum, listTypeTracks, tracks } from '../../../data';
 import * as React from 'react';
 import {
   View,
@@ -12,62 +12,39 @@ import {
 import { Colors } from 'src/constants';
 import { RootStackParamList } from 'src/interfaces/RootStackParamList';
 import { ItemType } from 'src/interfaces/Playlist';
+import { usePlayer } from 'src/provider';
+import { MINI_AREA_HEIGHT } from '../Player/Dimensions';
 
-interface ShowListProps {
-  route: {
-    params: {
-      index: number;
-      title: string;
-    };
-  };
-}
-
-type ItemData = {
-  id: string | number;
-  title: string;
-};
-
-type ShowListScreenProps = NativeStackNavigationProp<
+type MenuBySingerScreenProps = NativeStackNavigationProp<
   RootStackParamList,
-  'ShowListScreen'
+  'MenuBySingerScreen'
 >;
 
-export default function ShowListScreen(props: ShowListProps) {
-  const [listData, setListData] = React.useState<Array<ItemData>>([]);
-  const navigation = useNavigation<ShowListScreenProps>();
+export default function MenuBySingerScreen() {
+  const { displayPlayer } = usePlayer();
+  const navigation = useNavigation<MenuBySingerScreenProps>();
 
   const onPress = (item: ItemType) => {
+    const data = tracks.filter((track) => track.singerId === item.id);
     navigation.navigate('ListByFilterScreen', {
-      item: item,
-      index: props.route.params.index,
+      data,
+      title: item.title,
     });
   };
 
-  React.useEffect(() => {
-    switch (props.route.params.index) {
-      case 0:
-        setListData(listSinger);
-        break;
-      case 1:
-        setListData(listAlbum);
-        break;
-      case 2:
-        setListData(listTypeTracks);
-        break;
-      default:
-        break;
-    }
-  }, []);
-
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { paddingBottom: displayPlayer ? MINI_AREA_HEIGHT : 0 },
+      ]}>
       <View style={styles.header}>
-        <Text style={styles.textHeader}>{props.route.params.title}</Text>
+        <Text style={styles.textHeader}>Ca sĩ</Text>
       </View>
       <FlatList
-        data={listData}
+        data={listSinger}
         keyExtractor={(_, index) => index.toString()}
-        renderItem={({ item }: { item: ItemData; index: number }) => {
+        renderItem={({ item }: { item: ItemType; index: number }) => {
           return (
             <TouchableOpacity style={styles.btn} onPress={() => onPress(item)}>
               <Text style={styles.textBtn}>{item.title}</Text>

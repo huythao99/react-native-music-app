@@ -12,7 +12,9 @@ import { Colors } from 'src/constants';
 import { AddFolder } from 'src/icons/AddFolder';
 import { IPlaylist } from 'src/interfaces';
 import { RootStackParamList } from 'src/interfaces/RootStackParamList';
-import { usePlaylist } from 'src/provider';
+import { usePlayer, usePlaylist } from 'src/provider';
+import { MINI_AREA_HEIGHT } from '../Player/Dimensions';
+import { Item } from '../Playlist/Lists/Item';
 
 type PersonalScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -20,15 +22,27 @@ type PersonalScreenProps = NativeStackNavigationProp<
 >;
 
 export default function Personal() {
-  const { myPlayList } = usePlaylist();
+  const { displayPlayer } = usePlayer();
+  const { myPlayLists } = usePlaylist();
   const navigation = useNavigation<PersonalScreenProps>();
 
   const onPress = () => {
     navigation.navigate('CreateNewPlayList');
   };
 
+  const onPressItem = (item) => {
+    navigation.navigate('MyPlayListScreen', {
+      data: item.items,
+      title: item.title,
+    });
+  };
+
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { paddingBottom: displayPlayer ? MINI_AREA_HEIGHT : 0 },
+      ]}>
       <View style={styles.header}>
         <Text style={styles.textHeader}>Danh sách phát</Text>
         <TouchableOpacity style={styles.button} onPress={onPress}>
@@ -37,15 +51,23 @@ export default function Personal() {
         </TouchableOpacity>
       </View>
       <FlatList
-        data={myPlayList}
-        renderItem={({ item, index }: { item: IPlaylist; index: number }) => {
+        contentContainerStyle={styles.flatlistContainer}
+        data={myPlayLists}
+        renderItem={({ item }: { item: IPlaylist; index: number }) => {
           return (
-            <TouchableOpacity style={styles.btn}>
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={() => onPressItem(item)}>
               <Text style={styles.textBtn}>{item.title}</Text>
             </TouchableOpacity>
           );
         }}
         numColumns={2}
+        ListEmptyComponent={() => (
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>Bạn chưa có danh sách nào</Text>
+          </View>
+        )}
         keyExtractor={(_, index) => index.toString()}
       />
     </View>
@@ -101,5 +123,18 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: Colors.black,
     textAlign: 'center',
+  },
+  flatlistContainer: {
+    flexGrow: 1,
+  },
+  emptyContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  emptyText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: Colors.white,
   },
 });

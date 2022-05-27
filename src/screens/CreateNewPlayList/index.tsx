@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import { tracks } from '../../../data';
 import * as React from 'react';
 import {
@@ -7,24 +8,80 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { Colors } from 'src/constants';
-import { ITrack } from 'src/interfaces';
+import { Colors, Keys } from 'src/constants';
+import { usePlayer, usePlaylist } from 'src/provider';
+import { MINI_AREA_HEIGHT } from '../Player/Dimensions';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 export default function CreateNewPlayList() {
-  const inputRef = React.useRef(null);
+  const { displayPlayer } = usePlayer();
+  const navigation = useNavigation();
+  const { myPlayLists, setMyPlayLists } = usePlaylist();
+  const [namePlayList, setNamePlayList] = React.useState('');
+  const [arraySelect, setArraySelect] = React.useState<Array<string>>([]);
+
+  const isSelected = (id: string) => {
+    return arraySelect.includes(id);
+  };
+
+  const onPressItem = (id: string) => {
+    const newData = [...arraySelect];
+    const indexOfItem = newData.findIndex((value: string) => value === id);
+    if (indexOfItem !== -1) {
+      newData.splice(indexOfItem, 1);
+    } else {
+      newData.push(id);
+    }
+    setArraySelect(newData);
+  };
+
+  const onPressConfirmButton = async () => {
+    if (namePlayList.trim() === '') {
+      Alert.alert('Thông báo', 'Vui lòng nhập tên danh sách của bạn');
+    } else if (arraySelect.length === 0) {
+      Alert.alert('Thông báo', 'Vui lòng chọn ít nhất một bài hát');
+    } else if (
+      myPlayLists &&
+      myPlayLists.findIndex((item) => item.title === namePlayList.trim()) !== -1
+    ) {
+      Alert.alert('Thông báo', 'Danh sách phát đã tồn tại');
+    } else {
+      const newPlayLists = [
+        ...myPlayLists,
+        { title: namePlayList, items: arraySelect, id: Date.now().toString() },
+      ];
+      setMyPlayLists(newPlayLists);
+      const jsonValue = JSON.stringify(newPlayLists);
+      await AsyncStorage.setItem(Keys.MY_PLAY_LISTS, jsonValue);
+      Alert.alert('Thông báo', 'Tạo danh sách mới thành công', [
+        {
+          text: 'Hủy',
+          onPress: () => navigation.goBack(),
+        },
+      ]);
+    }
+  };
 
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        { paddingBottom: displayPlayer ? MINI_AREA_HEIGHT : 0 },
+      ]}>
       <View style={styles.header}>
         <Text style={styles.textHeader}>Tạo danh sách của bạn</Text>
       </View>
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Nhập tên danh sách của bạn"
-          ref={inputRef}
+          value={namePlayList}
+          onChangeText={(text: string) => setNamePlayList(text)}
           style={styles.input}
+          placeholderTextColor={Colors.white}
         />
       </View>
       <FlatList
@@ -32,7 +89,9 @@ export default function CreateNewPlayList() {
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item, index }: { item: any; index: number }) => {
           return (
-            <TouchableOpacity style={styles.itemContainer}>
+            <TouchableOpacity
+              style={styles.itemContainer}
+              onPress={() => onPressItem(item.id)}>
               <View style={styles.artworkContainer}>
                 {item.artwork ? (
                   <FastImage source={item.artwork} style={styles.artwork} />
@@ -64,12 +123,30 @@ export default function CreateNewPlayList() {
                 <View style={styles.time}>
                   <Text style={styles.itemDuration}>{item.duration}</Text>
                 </View>
-                <View style={styles.options} />
+                <View style={styles.checkboxContainer}>
+                  <View
+                    style={[
+                      styles.checkbox,
+                      {
+                        backgroundColor: isSelected(item.id)
+                          ? Colors.confirm
+                          : 'none',
+                      },
+                    ]}
+                  />
+                </View>
               </View>
             </TouchableOpacity>
           );
         }}
       />
+      <View style={styles.bottomRow}>
+        <TouchableOpacity
+          style={styles.confirmButton}
+          onPress={onPressConfirmButton}>
+          <Text style={styles.confirmText}>Lưu danh sách</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -98,10 +175,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   input: {
-    height: 40,
+    height: 45,
     paddingHorizontal: 16,
-    paddingVertical: 5,
-    fontSize: 12,
+    paddingVertical: 3,
+    fontSize: 14,
     fontWeight: 'normal',
     borderWidth: 1,
     borderRadius: 4,
@@ -176,9 +253,21 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
   },
 
-  options: {
-    minWidth: 50,
-    alignItems: 'flex-end',
+  checkboxContainer: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#AEAEAE',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 16,
+  },
+
+  checkbox: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
   },
 
   itemTitle: {
@@ -194,5 +283,26 @@ const styles = StyleSheet.create({
   itemDuration: {
     fontSize: 16,
     color: Colors.mute,
+  },
+
+  bottomRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 40,
+    paddingVertical: 16,
+  },
+  confirmButton: {
+    flex: 1,
+    height: 40,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.confirm,
+  },
+  confirmText: {
+    fontWeight: 'bold',
+    color: Colors.white,
+    fontSize: 16,
+    textAlign: 'center',
   },
 });

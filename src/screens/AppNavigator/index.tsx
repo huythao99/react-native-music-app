@@ -3,48 +3,42 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from 'src/interfaces/RootStackParamList';
 import TopTabs from './TopTabs';
-import ShowListScreen from '../ShowListScreen';
 import ListByFilterScreen from '../ListByFilterScreen';
 import CreateNewPlayList from '../CreateNewPlayList';
+import MenuBySingerScreen from '../MenuBySingerScreen';
+import MenuByAlbumScreen from '../MenuByAlbumScreen';
+import MenuByTypeScreen from '../MenuByTypeScreen';
+import MyPlayListScreen from '../MyPlayLists';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+          presentation: 'modal',
+        }}>
+        <Stack.Screen name={'TopTabs'} component={TopTabs} />
         <Stack.Screen
-          name={'TopTabs'}
-          component={TopTabs}
-          options={{
-            headerShown: false,
-            presentation: 'modal',
-          }}
+          name={'MenuBySingerScreen'}
+          component={MenuBySingerScreen}
         />
         <Stack.Screen
-          name={'ShowListScreen'}
-          component={ShowListScreen}
-          options={{
-            headerShown: false,
-            presentation: 'modal',
-          }}
+          name={'MenuByAlbumScreen'}
+          component={MenuByAlbumScreen}
         />
+        <Stack.Screen name={'MenuByTypeScreen'} component={MenuByTypeScreen} />
         <Stack.Screen
           name={'ListByFilterScreen'}
           component={ListByFilterScreen}
-          options={{
-            headerShown: false,
-            presentation: 'modal',
-          }}
         />
         <Stack.Screen
           name={'CreateNewPlayList'}
           component={CreateNewPlayList}
-          options={{
-            headerShown: false,
-            presentation: 'modal',
-          }}
         />
+        <Stack.Screen name={'MyPlayListScreen'} component={MyPlayListScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
