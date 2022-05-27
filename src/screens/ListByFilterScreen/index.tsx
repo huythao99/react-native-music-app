@@ -1,7 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
+import { useNavigation } from '@react-navigation/native';
 import * as React from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
 import { Colors } from 'src/constants';
+import { Back } from 'src/icons';
 import { usePlayer } from 'src/provider';
 import { MINI_AREA_HEIGHT } from '../Player/Dimensions';
 import ListItem from '../Playlist/Lists/ListItem';
@@ -19,6 +27,7 @@ interface ListByFilterProps {
 
 export default function ListByFilterScreen(props: ListByFilterProps) {
   const { displayPlayer } = usePlayer();
+  const navigation = useNavigation();
   return (
     <View
       style={[
@@ -26,6 +35,9 @@ export default function ListByFilterScreen(props: ListByFilterProps) {
         { paddingBottom: displayPlayer ? MINI_AREA_HEIGHT : 0 },
       ]}>
       <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Back fill="#AB47BC" />
+        </TouchableOpacity>
         <Text style={styles.textHeader}>{props.route.params.title}</Text>
       </View>
       <ListItem data={props.route.params.data} />
@@ -36,20 +48,21 @@ export default function ListByFilterScreen(props: ListByFilterProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.white,
   },
   header: {
     paddingVertical: 5,
     alignItems: 'center',
-    backgroundColor: Colors.black,
     marginVertical: 8,
-    paddingHorizontal: 16,
+    paddingHorizontal: 30,
+    flexDirection: 'row',
   },
   textHeader: {
     fontWeight: 'bold',
     fontSize: 25,
-    color: Colors.white,
+    color: '#AB47BC',
     textAlign: 'center',
+    marginLeft: 30,
   },
   horizontal: {
     height: '100%',

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import { Colors } from 'src/constants';
 import { AddFolder } from 'src/icons/AddFolder';
@@ -43,13 +44,6 @@ export default function Personal() {
         styles.container,
         { paddingBottom: displayPlayer ? MINI_AREA_HEIGHT : 0 },
       ]}>
-      <View style={styles.header}>
-        <Text style={styles.textHeader}>Danh sách phát</Text>
-        <TouchableOpacity style={styles.button} onPress={onPress}>
-          <AddFolder size={18} fill={'#000000'} />
-          <Text style={styles.textButton}>Tạo danh sách mới</Text>
-        </TouchableOpacity>
-      </View>
       <FlatList
         contentContainerStyle={styles.flatlistContainer}
         data={myPlayLists}
@@ -58,14 +52,31 @@ export default function Personal() {
             <TouchableOpacity
               style={styles.btn}
               onPress={() => onPressItem(item)}>
+              <Image
+                source={require('../../../images/itunes.png')}
+                style={styles.playlist}
+              />
               <Text style={styles.textBtn}>{item.title}</Text>
             </TouchableOpacity>
           );
         }}
-        numColumns={2}
+        ListHeaderComponent={() => (
+          <View style={styles.header}>
+            <TouchableOpacity style={styles.button} onPress={onPress}>
+              <Image
+                source={require('../../../images/music.png')}
+                style={styles.playlist}
+              />
+              <Text style={styles.textButton}>Tạo danh sách mới</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         ListEmptyComponent={() => (
           <View style={styles.emptyContainer}>
-            <Text style={styles.emptyText}>Bạn chưa có danh sách nào</Text>
+            <Image
+              style={styles.image}
+              source={require('../../../images/workout.png')}
+            />
           </View>
         )}
         keyExtractor={(_, index) => index.toString()}
@@ -77,21 +88,22 @@ export default function Personal() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.white,
   },
   header: {
     paddingVertical: 5,
     alignItems: 'center',
-    backgroundColor: Colors.black,
     marginVertical: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 16,
+    marginHorizontal: 16,
+    borderBottomWidth: 0.5,
+    borderBottomColor: '#AB47BC',
   },
   textHeader: {
     fontWeight: 'bold',
     fontSize: 25,
-    color: Colors.white,
+    color: Colors.black,
   },
   button: {
     flexDirection: 'row',
@@ -101,36 +113,45 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     backgroundColor: Colors.white,
   },
+  playlist: {
+    width: 40,
+    height: 40,
+    resizeMode: 'cover',
+  },
   textButton: {
+    fontSize: 15,
+    color: '#AB47BC',
     fontWeight: 'bold',
-    fontSize: 12,
-    color: Colors.black,
     marginLeft: 8,
   },
   btn: {
-    width: 160,
     paddingVertical: 5,
     backgroundColor: Colors.white,
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 8,
     alignItems: 'center',
-    justifyContent: 'center',
     paddingHorizontal: 5,
+    flexDirection: 'row',
   },
   textBtn: {
-    fontWeight: 'bold',
-    fontSize: 15,
-    color: Colors.black,
+    fontSize: 17,
+    color: '#212121',
     textAlign: 'center',
+    marginHorizontal: 16,
   },
   flatlistContainer: {
     flexGrow: 1,
   },
   emptyContainer: {
-    justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
+    marginTop: 150,
+  },
+  image: {
+    width: 200,
+    height: 200,
+    resizeMode: 'cover',
   },
   emptyText: {
     fontSize: 20,

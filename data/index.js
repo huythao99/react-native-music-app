@@ -262,20 +262,24 @@ export const defaultCurrentList = {
 
 export const listTypeTracks = [
   {
-    id: 1,
+    id: '1',
     title: 'Pop',
+    artwork: require('../images/bg8.jpg'),
   },
   {
-    id: 2,
+    id: '2',
     title: 'Rock',
+    artwork: require('../images/bg9.jpg'),
   },
   {
-    id: 3,
+    id: '3',
     title: 'Classic',
+    artwork: require('../images/bg10.jpg'),
   },
   {
-    id: 4,
+    id: '4',
     title: 'Baroque',
+    artwork: require('../images/bg11.jpg'),
   },
 ];
 
@@ -350,9 +354,11 @@ export const listAlbum = [
   {
     id: '1',
     title: 'Album 1',
+    artwork: require('../images/bg3.jpg'),
   },
   {
     id: '2',
     title: 'Album 2',
+    artwork: require('../images/bg5.jpg'),
   },
 ];

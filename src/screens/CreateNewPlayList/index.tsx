@@ -16,6 +16,7 @@ import { usePlayer, usePlaylist } from 'src/provider';
 import { MINI_AREA_HEIGHT } from '../Player/Dimensions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { Back } from 'src/icons';
 
 export default function CreateNewPlayList() {
   const { displayPlayer } = usePlayer();
@@ -73,7 +74,10 @@ export default function CreateNewPlayList() {
         { paddingBottom: displayPlayer ? MINI_AREA_HEIGHT : 0 },
       ]}>
       <View style={styles.header}>
-        <Text style={styles.textHeader}>Tạo danh sách của bạn</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Back fill="#FFFFFF" />
+        </TouchableOpacity>
+        <Text style={styles.textHeader}>Tạo Playlist</Text>
       </View>
       <View style={styles.inputContainer}>
         <TextInput
@@ -90,6 +94,7 @@ export default function CreateNewPlayList() {
         renderItem={({ item, index }: { item: any; index: number }) => {
           return (
             <TouchableOpacity
+              activeOpacity={0.8}
               style={styles.itemContainer}
               onPress={() => onPressItem(item.id)}>
               <View style={styles.artworkContainer}>
@@ -124,16 +129,17 @@ export default function CreateNewPlayList() {
                   <Text style={styles.itemDuration}>{item.duration}</Text>
                 </View>
                 <View style={styles.checkboxContainer}>
-                  <View
-                    style={[
-                      styles.checkbox,
-                      {
-                        backgroundColor: isSelected(item.id)
-                          ? Colors.confirm
-                          : 'none',
-                      },
-                    ]}
-                  />
+                  {isSelected(item.id) && (
+                    <View
+                      style={[
+                        styles.checkbox,
+                        {
+                          backgroundColor: '#2835FF',
+                          borderRadius: 12,
+                        },
+                      ]}
+                    />
+                  )}
                 </View>
               </View>
             </TouchableOpacity>
@@ -154,21 +160,21 @@ export default function CreateNewPlayList() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.black,
+    backgroundColor: '#35234C',
   },
   header: {
     paddingVertical: 5,
     alignItems: 'center',
-    backgroundColor: Colors.black,
     marginVertical: 8,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
     paddingHorizontal: 16,
+    flexDirection: 'row',
   },
   textHeader: {
     fontWeight: 'bold',
     fontSize: 25,
     color: Colors.white,
+    textAlign: 'center',
+    marginLeft: 16,
   },
   inputContainer: {
     marginVertical: 8,
@@ -267,7 +273,6 @@ const styles = StyleSheet.create({
   checkbox: {
     width: 12,
     height: 12,
-    borderRadius: 6,
   },
 
   itemTitle: {
@@ -276,7 +281,7 @@ const styles = StyleSheet.create({
   },
 
   itemArtist: {
-    fontSize: 15,
+    fontSize: 14,
     color: Colors.white,
   },
 
@@ -297,7 +302,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: Colors.confirm,
+    backgroundColor: '#AB47BC',
   },
   confirmText: {
     fontWeight: 'bold',

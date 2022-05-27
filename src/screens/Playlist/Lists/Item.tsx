@@ -31,17 +31,23 @@ export const Item: React.FC<Props> = ({ item, last, onPressItem }: Props) => {
 
       <View style={[styles.content, last && { borderBottomWidth: 0 }]}>
         <View style={styles.information}>
-          <Text size={16}>{title}</Text>
+          <Text color="#212121" size={16}>
+            {title}
+          </Text>
 
           <View style={styles.artist}>
-            <Text numberOfLines={1} ellipsizeMode="tail" size={15}>
+            <Text
+              color="#757575"
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              size={14}>
               {artist}
             </Text>
           </View>
         </View>
 
         <View style={styles.time}>
-          <Text color={Colors.mute} size={16}>
+          <Text color={'#212121'} size={16}>
             {duration}
           </Text>
         </View>
@@ -99,7 +105,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 0.5,
-    borderBottomColor: Colors.mute,
+    borderBottomColor: '#757575',
     marginLeft: 20,
     paddingVertical: 10,
   },

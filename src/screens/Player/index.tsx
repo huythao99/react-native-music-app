@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
 
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: 'rgb(27, 35, 35)',
+    backgroundColor: '#271B37',
   },
   button: {
     flexDirection: 'row',

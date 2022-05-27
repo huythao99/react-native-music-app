@@ -7,4 +7,5 @@ export interface IPlaylist {
 export interface ItemType {
   id: number | string;
   title: string;
+  artwork?: any;
 }

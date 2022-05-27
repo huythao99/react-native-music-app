@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Text,
+  Image,
 } from 'react-native';
 import { Colors } from 'src/constants';
 import { RootStackParamList } from 'src/interfaces/RootStackParamList';
@@ -19,27 +20,45 @@ export const Header = () => {
   return (
     <View style={styles.container}>
       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => {
-            navigation.navigate('MenuBySingerScreen');
-          }}>
+        <View style={styles.buttonWrap}>
+          <TouchableOpacity
+            style={[styles.btn, { backgroundColor: '#0091EA' }]}
+            onPress={() => {
+              navigation.navigate('MenuBySingerScreen');
+            }}>
+            <Image
+              source={require('../../../images/micro.png')}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
           <Text style={styles.textBtn}>Ca sĩ</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => {
-            navigation.navigate('MenuByAlbumScreen');
-          }}>
+        </View>
+        <View style={styles.buttonWrap}>
+          <TouchableOpacity
+            style={[styles.btn, { backgroundColor: '#F57F17' }]}
+            onPress={() => {
+              navigation.navigate('MenuByAlbumScreen');
+            }}>
+            <Image
+              source={require('../../../images/music-album.png')}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
           <Text style={styles.textBtn}>Album</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.btn}
-          onPress={() => {
-            navigation.navigate('MenuByTypeScreen');
-          }}>
+        </View>
+        <View style={styles.buttonWrap}>
+          <TouchableOpacity
+            style={[styles.btn, { backgroundColor: '#00BFA5' }]}
+            onPress={() => {
+              navigation.navigate('MenuByTypeScreen');
+            }}>
+            <Image
+              source={require('../../../images/app.png')}
+              style={styles.icon}
+            />
+          </TouchableOpacity>
           <Text style={styles.textBtn}>Thể loại</Text>
-        </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
@@ -49,20 +68,30 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    height: 70,
     paddingHorizontal: 20,
     alignItems: 'center',
+    marginVertical: 16,
+  },
+  buttonWrap: {
+    alignItems: 'center',
+    paddingHorizontal: 16,
   },
   btn: {
     paddingVertical: 5,
     paddingHorizontal: 16,
     borderRadius: 5,
-    backgroundColor: Colors.white,
-    marginRight: 16,
+    // backgroundColor: 'red',
+    alignItems: 'center',
+  },
+  icon: {
+    width: 40,
+    height: 40,
+    resizeMode: 'cover',
   },
   textBtn: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    color: Colors.black,
+    marginTop: 8,
+    fontSize: 13,
+    color: '#212121',
+    textAlign: 'center',
   },
 });

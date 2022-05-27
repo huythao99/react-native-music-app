@@ -8,12 +8,14 @@ import {
   StyleSheet,
   FlatList,
   TouchableOpacity,
+  ImageBackground,
 } from 'react-native';
 import { Colors } from 'src/constants';
 import { RootStackParamList } from 'src/interfaces/RootStackParamList';
 import { ItemType } from 'src/interfaces/Playlist';
 import { usePlayer } from 'src/provider';
 import { MINI_AREA_HEIGHT } from '../Player/Dimensions';
+import { Back } from 'src/icons';
 
 type MenuByAlbumScreenProps = NativeStackNavigationProp<
   RootStackParamList,
@@ -38,20 +40,30 @@ export default function MenuByAlbumScreen() {
         styles.container,
         { paddingBottom: displayPlayer ? MINI_AREA_HEIGHT : 0 },
       ]}>
-      <View style={styles.header}>
-        <Text style={styles.textHeader}>Album</Text>
-      </View>
+      <ImageBackground
+        source={require('../../../images/bg4.jpg')}
+        style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Back fill="#AB47BC" />
+        </TouchableOpacity>
+      </ImageBackground>
       <FlatList
         data={listAlbum}
         keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }: { item: ItemType; index: number }) => {
           return (
-            <TouchableOpacity style={styles.btn} onPress={() => onPress(item)}>
-              <Text style={styles.textBtn}>{item.title}</Text>
+            <TouchableOpacity onPress={() => onPress(item)} activeOpacity={0.8}>
+              <ImageBackground
+                source={item.artwork}
+                style={styles.itemContainer}
+                borderRadius={8}>
+                <View style={styles.btn}>
+                  <Text style={styles.textBtn}>{item.title}</Text>
+                </View>
+              </ImageBackground>
             </TouchableOpacity>
           );
         }}
-        numColumns={2}
       />
     </View>
   );
@@ -60,34 +72,41 @@ export default function MenuByAlbumScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.black,
+    backgroundColor: Colors.white,
   },
   header: {
     paddingVertical: 5,
     alignItems: 'center',
-    backgroundColor: Colors.black,
-    marginVertical: 8,
+    flexDirection: 'row',
+    paddingHorizontal: 16,
+    height: 80,
+    resizeMode: 'cover',
   },
   textHeader: {
     fontWeight: 'bold',
     fontSize: 25,
-    color: Colors.white,
+    color: '#AB47BC',
+  },
+  itemContainer: {
+    height: 200,
+    justifyContent: 'flex-end',
+    paddingVertical: 16,
+    marginHorizontal: 16,
+    marginVertical: 16,
   },
   btn: {
-    width: 160,
     paddingVertical: 5,
-    backgroundColor: Colors.white,
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 8,
     alignItems: 'center',
-    justifyContent: 'center',
     paddingHorizontal: 5,
+    flexDirection: 'row',
   },
   textBtn: {
     fontWeight: 'bold',
-    fontSize: 15,
-    color: Colors.black,
+    fontSize: 18,
+    color: Colors.white,
     textAlign: 'center',
   },
 });

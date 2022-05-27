@@ -68,11 +68,15 @@ export const NextPrev: React.FC<Props> = () => {
   }, [track, active, lists]);
 
   const onPressNext = () => {
-    TrackPlayer.skipToNext();
+    try {
+      TrackPlayer.skipToNext();
+    } catch (error) {}
   };
 
   const onPressPrevious = () => {
-    TrackPlayer.skipToPrevious();
+    try {
+      TrackPlayer.skipToPrevious();
+    } catch (error) {}
   };
 
   return (
