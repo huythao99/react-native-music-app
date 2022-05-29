@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {
   getState,
@@ -141,7 +141,7 @@ const Circle = () => {
     <Animated.View style={[styles.cover, style]}>
       <View style={styles.artwork}>
         {track.artwork ? (
-          <FastImage source={track.artwork} style={styles.image} />
+          <Image source={track.artwork} style={styles.image} />
         ) : null}
       </View>
       <View style={styles.dotCover}>
@@ -192,13 +192,13 @@ const styles = StyleSheet.create({
   artwork: {
     borderRadius: 999,
     width: '100%',
-    overflow: 'hidden',
     height: '100%',
   },
 
   image: {
     width: '100%',
     height: '100%',
+    borderRadius: 999,
   },
 
   dotCover: {

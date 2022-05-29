@@ -15,6 +15,7 @@ const cy = padding - 1;
 const centerX = window.width / 2;
 const viewBox = `0 0 ${width} ${height}`;
 const strokeDasharray = 141.33464427236564;
+// const d = `M${padding} ${cy} A ${r} ${r} 0 0 0 ${cx * 2 - padding} ${cy}`;
 const d = `M${padding} ${cy} A ${r} ${r} 0 0 0 ${cx * 2 - padding} ${cy}`;
 
 export {
