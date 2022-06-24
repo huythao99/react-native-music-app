@@ -10,12 +10,10 @@ import {
   Image,
 } from 'react-native';
 import { Colors } from 'src/constants';
-import { AddFolder } from 'src/icons/AddFolder';
 import { IPlaylist } from 'src/interfaces';
 import { RootStackParamList } from 'src/interfaces/RootStackParamList';
 import { usePlayer, usePlaylist } from 'src/provider';
 import { MINI_AREA_HEIGHT } from '../Player/Dimensions';
-import { Item } from '../Playlist/Lists/Item';
 
 type PersonalScreenProps = NativeStackNavigationProp<
   RootStackParamList,

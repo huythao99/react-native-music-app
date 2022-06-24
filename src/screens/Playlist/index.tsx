@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-
-import { tracks } from '../../../data';
+import { View, StyleSheet, Animated, InteractionManager } from 'react-native';
 
 import { Colors, Keys } from 'src/constants';
 import { usePlayer, usePlaylist } from 'src/provider';

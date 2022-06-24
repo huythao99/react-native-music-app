@@ -13,4 +13,10 @@ export type RootStackParamList = {
   };
   Personal: undefined;
   CreateNewPlayList: undefined;
+  PlayListScreen: {
+    trackId: string;
+  };
+  CreatePlayListScreen: {
+    trackId: string;
+  };
 };

@@ -9,6 +9,8 @@ import MenuBySingerScreen from '../MenuBySingerScreen';
 import MenuByAlbumScreen from '../MenuByAlbumScreen';
 import MenuByTypeScreen from '../MenuByTypeScreen';
 import MyPlayListScreen from '../MyPlayLists';
+import PlayListScreen from '../PlayListScreen/PlayListScreen';
+import CreatePlayListScreen from '../PlayListScreen/CreatePlayListScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -39,6 +41,11 @@ export default function AppNavigator() {
           component={CreateNewPlayList}
         />
         <Stack.Screen name={'MyPlayListScreen'} component={MyPlayListScreen} />
+        <Stack.Screen name={'PlayListScreen'} component={PlayListScreen} />
+        <Stack.Screen
+          name={'CreatePlayListScreen'}
+          component={CreatePlayListScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,10 +1,13 @@
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 import FastImage from 'react-native-fast-image';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Text } from 'src/components';
 import { Colors } from 'src/constants';
+import { Plus } from 'src/icons/Plus';
 import { ITrack } from 'src/interfaces';
+import { RootStackParamList } from 'src/interfaces/RootStackParamList';
 
 interface Props {
   item: ITrack;
@@ -12,11 +15,23 @@ interface Props {
   onPressItem: (id: string) => void;
 }
 
+type NavigationProps = StackNavigationProp<
+  RootStackParamList,
+  'PlayListScreen'
+>;
+
 export const Item: React.FC<Props> = ({ item, last, onPressItem }: Props) => {
   const { id, title, artwork, artist, duration } = item;
+  const navigation = useNavigation<NavigationProps>();
 
   const onPress = async () => {
     onPressItem(id);
+  };
+
+  const onPressPlus = () => {
+    navigation.navigate('PlayListScreen', {
+      trackId: id,
+    });
   };
 
   return (
@@ -51,6 +66,9 @@ export const Item: React.FC<Props> = ({ item, last, onPressItem }: Props) => {
             {duration}
           </Text>
         </View>
+        <TouchableOpacity style={styles.time} onPress={onPressPlus}>
+          <Plus fill={'#AB47BC'} size={20} />
+        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
@@ -123,5 +141,7 @@ const styles = StyleSheet.create({
   time: {
     minWidth: 50,
     alignItems: 'flex-end',
+    height: 50,
+    justifyContent: 'center',
   },
 });

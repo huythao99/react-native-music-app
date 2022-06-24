@@ -23,7 +23,7 @@ export const Section = () => {
   return (
     <View onLayout={onLayout} style={styles.container}>
       <Record {...{ offsetY }} />
-      {/* <Slider {...{ isTouching, setTouching, setTime }} /> */}
+      <Slider {...{ isTouching, setTouching, setTime }} />
       <Duration {...{ time, isTouching }} />
       <Shuffle />
       <Repeat />
